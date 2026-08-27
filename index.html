@@ -31,7 +31,7 @@ try {
       amazon_connect('styles',{iconType:'CHAT',openChat:{color:'#fff',backgroundColor:'#ed0000'},closeChat:{color:'#fff',backgroundColor:'#322332'}});
       amazon_connect('authenticate',function(cb){aws_connect.authenticate(cb)});
       amazon_connect('snippetId',aws_connect.snippetID);
-      amazon_connect('customLaunchBehavior',{skipIconButtonAndAutoLaunch:true});
+      amazon_connect('customLaunchBehavior',{skipIconButtonAndAutoLaunch:false});
       amazon_connect('supportedMessagingContentTypes',['text/plain','text/markdown','application/json']);
       amazon_connect('updateSandboxAttributes','allow-scripts allow-same-origin allow-popups allow-downloads allow-forms allow-top-navigation-by-user-activation allow-modals allow-top-navigation');
       amazon_connect('customerChatInterfaceUrl','https://d3htglnm69vu7a.cloudfront.net/amazon-connect-vm.js');
