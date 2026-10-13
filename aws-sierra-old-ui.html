@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Broadband faults chat test</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 24px; font-family: Arial, sans-serif; color: #17131b; background: #fff; }
+    main { max-width: 480px; margin: 64px auto; }
+    h1 { font-size: 26px; }
+    p { line-height: 1.5; }
+    button { padding: 14px 24px; border: 0; border-radius: 8px; background: #ed0000; color: #fff; font: inherit; font-weight: bold; cursor: pointer; }
+    button:focus-visible { outline: 3px solid #322332; outline-offset: 4px; }
+    .notice { margin-top: 24px; font-size: 14px; color: #68616d; }
+    #integration-status { margin-top: 16px; font-size: 14px; color: #68616d; }
+    #integration-status[data-state="error"] { color: #b00020; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Broadband faults chat</h1>
+    <p>Click the button to start the chat, then follow the test instructions.</p>
+    <button type="button" class="openChatWindow">Start chat</button>
+    <p class="notice">Test information only. Do not enter real customer details, passwords or payment information.</p>
+    <div id="integration-status" data-state="loading" role="status" aria-live="polite">Loading chat...</div>
+  </main>
+<script>
+try {
+  var aws_connect = {
+    awsApiGateway: "https://fer0osb9kg.execute-api.eu-west-2.amazonaws.com/dev/",
+    awsWAFIntegration: "https://5e96a17372f3.eu-west-2.sdk.awswaf.com/5e96a17372f3/17d3e9dab293/challenge.js",
+    chatInterfaceJs: "https://d2zasqxhmd6ne4.cloudfront.net/amazon-connect-chat-interface-client.js",
+    siteID: "DigitalOffsite",
+    widgetID: "854b421d-ef78-464a-8835-cc63fc2267ca",
+    snippetID: "QVFJREFIajZXQjcyUXcrNFBEZVZpU0tIdzdFSjJTRnF3a2E2WXVITnhwS1FrcWpBd1FGSzJxaWlVeCt4dTE4NTZRMmpDazlTQUFBQWJqQnNCZ2txaGtpRzl3MEJCd2FnWHpCZEFnRUFNRmdHQ1NxR1NJYjNEUUVIQVRBZUJnbGdoa2dCWlFNRUFTNHdFUVFNQWZGRlNwQXlHbVpYaG5URUFnRVFnQ3RpQ2VVTWgvanVOTDc0TFNCRC80T3J4ckRxQTRMcGhmeHZocG1IajVyYnFTSGVlK2ZPL0ZidEV0M3Y6OkpZODFZMm8zSjM5Y04vSFJiNXFVUi9RaGtXU2FVV1VPMnZPLzlHSVFSWjJnZTh5OUNwTmk5OXhuK2Q3QS9DeTZsS3BETVYvYUx0a3BwVHd6RmRVL3NmMDhxYnRDdXpkZVpyVU1hUFZ1TDZ2R1JjMVc5bCtqV3kxSlJqYlJwVUt2Rm0wa24wV0Mwai82Vk5lL2p3S2srRWNMSFVHR0JiTT0=",
+    guid:function(){return crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(16)+'-'+Math.random().toString(16).slice(2)},
+    cookie:function(name){var m=document.cookie.match(new RegExp('(^| )'+name+'=([^;]+)'));return m?m[2]:undefined},
+    setCookie:function(name,value,ttl){document.cookie=name+'='+value+';path=/;SameSite=Lax;Secure'+(ttl?';max-age='+ttl:'')},
+    loadWaf:function(){return new Promise(function(resolve,reject){var s=document.createElement('script');s.src=aws_connect.awsWAFIntegration;s.defer=true;s.onload=resolve;s.onerror=reject;document.head.appendChild(s)})},
+    headers:function(token){var h=new Headers();h.append('X-Aws-Waf-Token',token);h.append('RequestID',aws_connect.guid());h.append('RequestTimestamp',new Date().toISOString());h.append('Content-Type','application/json');return h},
+    status:function(state,text){var e=document.getElementById('integration-status');e.dataset.state=state;e.textContent=text},
+    authenticate:function(callback){
+      var ready=(typeof AwsWafIntegration!=='undefined'&&typeof AwsWafIntegration.getToken==='function');
+      (ready?Promise.resolve():aws_connect.loadWaf()).then(function(){return AwsWafIntegration.getToken()}).then(function(token){
+        return fetch(aws_connect.awsApiGateway+'v1/chat/orchestration',{method:'POST',headers:aws_connect.headers(token),body:JSON.stringify({siteId:aws_connect.siteID,sessionId:aws_connect.cookie('awschat_sessionId')})})
+      }).then(function(r){if(!r.ok)throw new Error('Orchestration '+r.status);return r.json()}).then(function(r){
+        if(r.jwtToken&&r.ttl)aws_connect.setCookie('awschat_jwtToken',r.jwtToken,r.ttl);
+        if(r.sessionId&&r.ttl)aws_connect.setCookie('awschat_sessionId',r.sessionId,r.ttl);
+        callback(r.jwtToken); aws_connect.sendAttributes();
+      }).catch(function(e){aws_connect.status('error','Chat authentication failed');console.error(e)})
+    },
+    sendAttributes:function(){if(typeof AwsWafIntegration==='undefined')return;AwsWafIntegration.getToken().then(function(token){var sessionId=aws_connect.cookie('awschat_sessionId');if(!sessionId)return;return fetch(aws_connect.awsApiGateway+'v1/chat/contact-attributes',{method:'PUT',headers:aws_connect.headers(token),body:JSON.stringify({sessionId:sessionId,customAttributes:{visitorAttributes:{device:/Mobi|Android/i.test(navigator.userAgent)?'Mobile':'Desktop',startPage:location.href,source:'WEB'},journeyAttributes:{journey:'broadband-faults-poc',environment:'DEV'}}})})}).catch(console.warn)},
+    load:function(){
+      (function(w,d,x,id){var s=d.createElement('script');s.src=aws_connect.chatInterfaceJs;s.async=1;s.id=id;s.onload=function(){aws_connect.status('ready','AWS chat widget loaded')};s.onerror=function(){aws_connect.status('error','AWS widget failed to load')};d.head.appendChild(s);w[x]=w[x]||function(){(w[x].ac=w[x].ac||[]).push(arguments)}})(window,document,'amazon_connect',aws_connect.widgetID);
+      amazon_connect('styles',{iconType:'CHAT',openChat:{color:'#fff',backgroundColor:'#ed0000'},closeChat:{color:'#fff',backgroundColor:'#322332'}});
+      amazon_connect('authenticate',function(cb){aws_connect.authenticate(cb)});
+      amazon_connect('snippetId',aws_connect.snippetID);
+      amazon_connect('customLaunchBehavior',{skipIconButtonAndAutoLaunch:false});
+      amazon_connect('supportedMessagingContentTypes',['text/plain','text/markdown','application/json']);
+      amazon_connect('updateSandboxAttributes','allow-scripts allow-same-origin allow-popups allow-downloads allow-forms allow-top-navigation-by-user-activation allow-modals allow-top-navigation');
+      //amazon_connect('customerChatInterfaceUrl','https://d3htglnm69vu7a.cloudfront.net/amazon-connect-vm.js');
+      amazon_connect('initialMessage','Starting broadband fault support');
+      amazon_connect('contactAttributes',{css_selector:aws_connect.siteID,journey:'broadband-faults-poc',environment:'DEV',url:location.href});
+    }
+  };
+  aws_connect.load();
+} catch(e) { console.error(e); }
+</script>
+</body>
+</html>
