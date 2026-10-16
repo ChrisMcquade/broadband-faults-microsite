@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Broadband faults chat test</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 24px; font-family: Arial, sans-serif; color: #17131b; background: #fff; }
+    main { max-width: 480px; margin: 64px auto; }
+    h1 { font-size: 26px; }
+    p { line-height: 1.5; }
+    button { padding: 14px 24px; border: 0; border-radius: 8px; background: #ed0000; color: #fff; font: inherit; font-weight: bold; cursor: pointer; }
+    button:focus-visible { outline: 3px solid #322332; outline-offset: 4px; }
+    .notice { margin-top: 24px; font-size: 14px; color: #68616d; }
+    #integration-status { margin-top: 16px; font-size: 14px; color: #68616d; }
+    #integration-status[data-state="error"] { color: #b00020; }
+  </style>
+</head>
+<body>
+<main>
+    <h1>Broadband faults chat</h1>
+    <p>Click the button in the bottom corner to start the chat, then follow the test instructions.</p>
+    <p class="notice">Test information only. Do not enter real customer details, passwords or payment information.</p>
+    <div id="integration-status" data-state="loading" role="status" aria-live="polite">Loading chat...</div>
+  </main>
+<script type="text/javascript">
+try {
+  (function (w, d, x, id) {
+    var s = d.createElement("script");
+    s.src = "https://testbotflow.my.connect.aws/connectwidget/static/amazon-connect-chat-interface-client.js";
+    s.async = true;
+    s.id = id;
+    s.onload = function () {
+      var status = document.getElementById("integration-status");
+      if (status) {
+        status.dataset.state = "ready";
+        status.textContent = "AWS chat widget loaded";
+      }
+    };
+    s.onerror = function () {
+      var status = document.getElementById("integration-status");
+      if (status) {
+        status.dataset.state = "error";
+        status.textContent = "AWS chat widget failed to load";
+      }
+    };
+    d.getElementsByTagName("head")[0].appendChild(s);
+    w[x] = w[x] || function () {
+      (w[x].ac = w[x].ac || []).push(arguments);
+    };
+  })(
+    window,
+    document,
+    "amazon_connect",
+    "41adfe64-b565-4a6b-aa8a-f090ffff4613"
+  );
+
+  amazon_connect("styles", {
+    iconType: "CHAT",
+    openChat: { color: "#ffffff", backgroundColor: "#322332" },
+    closeChat: { color: "#ffffff", backgroundColor: "#322332" }
+  });
+
+  amazon_connect("customStyles", {
+    global: {
+      frameWidth: "338px",
+      frameHeight: "700px",
+      textColor: "#000000",
+      fontSize: "12px",
+      footerHeight: "60px"
+    },
+    header: {
+      headerFontSize: "10px",
+      headerTextColor: "#ffffff"
+    },
+    transcript: {
+      messageFontSize: "13px",
+      messageTextColor: "#ffffff"
+    },
+    composer: {
+      fontSize: "16px"
+    }
+  });
+
+  amazon_connect("initialMessage", "Starting a conversation");
+
+  amazon_connect("customizationObject", {
+    header: {
+      dropdown: true,
+      dynamicHeader: false
+    },
+    transcript: {
+      hideDisplayNames: false,
+      eventNames: {
+        customer: "Customer"
+      },
+      displayIcons: true,
+      iconSources: {
+        botMessage: "https://prod.ctassets.virginmedia.com/uploads/group_1efad698ba.png",
+        systemMessage: "https://prod.ctassets.virginmedia.com/uploads/group_1efad698ba.png",
+        agentMessage: "https://prod.ctassets.virginmedia.com/uploads/group_1efad698ba.png"
+      }
+    },
+    footer: {
+      disabled: true
+    }
+  });
+
+  amazon_connect(
+    "snippetId",
+    "QVFJREFIajVuODFjZG5KeGtQTUc5YXVLbVZLTTBSNlU2ZllybUx4M3ArVWtaQlRCZ1FFTmsySGh1c3Z2SWtKbGVaOUZ0aVpiQUFBQWJqQnNCZ2txaGtpRzl3MEJCd2FnWHpCZEFnRUFNRmdHQ1NxR1NJYjNEUUVIQVRBZUJnbGdoa2dCWlFNRUFTNHdFUVFNVzV0S29RUkloSGZWc1FVNEFnRVFnQ3Q0MGhXbFlOZzRyaTFLOGY0bjNJNS9hVWd2RTZFZitSaEx1YWwvdmV1SW45aTVmUHNmLzhGREM4eG06OmdEdzFZVjV2a2pJeUZCZldWUjlKbEhIS3pTMG44UW02UFp5OEI4T3lmUDJ1MXROK0hNMUVVQjArbzFvMzFMc1lFWG9tclozOUlwSlVycGswdjd5VEVldXVNQ29EanZyN0ErMy9iakNVODdhMTZHUEViYjVpSHp2TldWeGQxVGFyazY0Q1JpemdBSUdJc2oyQkpjK3BYWFRaSlhtMFRNbz0="
+  );
+
+  amazon_connect("supportedMessagingContentTypes", [
+    "text/plain",
+    "text/markdown",
+    "application/vnd.amazonaws.connect.message.interactive",
+    "application/vnd.amazonaws.connect.message.interactive.response"
+  ]);
+
+  amazon_connect(
+    "customerChatInterfaceUrl",
+    "https://d3htglnm69vu7a.cloudfront.net/amazon-connect-vm.js"
+  );
+} catch (error) {
+  var status = document.getElementById("integration-status");
+  if (status) {
+    status.dataset.state = "error";
+    status.textContent = "AWS chat widget could not be initialised";
+  }
+  console.error(error);
+}
+</script>
+</body>
+</html>
