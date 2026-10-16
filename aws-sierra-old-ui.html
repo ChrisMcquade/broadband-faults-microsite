@@ -52,7 +52,20 @@ try {
       composer: {
         fontSize: '16px'
       }
-    },
+    },    customizationObject: {
+                    header: { dropdown: true, dynamicHeader: false },
+                    transcript: {
+                        hideDisplayNames: false,
+                        eventNames: { customer: "Customer" },
+                        displayIcons: true,
+                        iconSources: {
+                            botMessage: "https://prod.ctassets.virginmedia.com/uploads/group_1efad698ba.png",
+                            systemMessage: "https://prod.ctassets.virginmedia.com/uploads/group_1efad698ba.png",
+                            agentMessage: "https://prod.ctassets.virginmedia.com/uploads/group_1efad698ba.png"
+                        }
+                    },
+                    footer: { disabled: true }
+                },
     guid:function(){return crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(16)+'-'+Math.random().toString(16).slice(2)},
     cookie:function(name){var m=document.cookie.match(new RegExp('(^| )'+name+'=([^;]+)'));return m?m[2]:undefined},
     setCookie:function(name,value,ttl){document.cookie=name+'='+value+';path=/;SameSite=Lax;Secure'+(ttl?';max-age='+ttl:'')},
@@ -76,6 +89,7 @@ try {
       amazon_connect('authenticate',function(cb){aws_connect.authenticate(cb)});
       amazon_connect('snippetId',aws_connect.snippetID);
       amazon_connect('customStyles',aws_connect.customStyles);
+      amazon_connect('customizationObject', aws_connect.customizationObject);
       amazon_connect('customLaunchBehavior',{skipIconButtonAndAutoLaunch:false});
       amazon_connect('supportedMessagingContentTypes',['text/plain','text/markdown','application/json']);
       amazon_connect('updateSandboxAttributes','allow-scripts allow-same-origin allow-popups allow-downloads allow-forms allow-top-navigation-by-user-activation allow-modals allow-top-navigation');
