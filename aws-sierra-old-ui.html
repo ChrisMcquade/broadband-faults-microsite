@@ -33,6 +33,26 @@ try {
     siteID: "DigitalOffsite",
     widgetID: "854b421d-ef78-464a-8835-cc63fc2267ca",
     snippetID: "QVFJREFIajZXQjcyUXcrNFBEZVZpU0tIdzdFSjJTRnF3a2E2WXVITnhwS1FrcWpBd1FGSzJxaWlVeCt4dTE4NTZRMmpDazlTQUFBQWJqQnNCZ2txaGtpRzl3MEJCd2FnWHpCZEFnRUFNRmdHQ1NxR1NJYjNEUUVIQVRBZUJnbGdoa2dCWlFNRUFTNHdFUVFNQWZGRlNwQXlHbVpYaG5URUFnRVFnQ3RpQ2VVTWgvanVOTDc0TFNCRC80T3J4ckRxQTRMcGhmeHZocG1IajVyYnFTSGVlK2ZPL0ZidEV0M3Y6OkpZODFZMm8zSjM5Y04vSFJiNXFVUi9RaGtXU2FVV1VPMnZPLzlHSVFSWjJnZTh5OUNwTmk5OXhuK2Q3QS9DeTZsS3BETVYvYUx0a3BwVHd6RmRVL3NmMDhxYnRDdXpkZVpyVU1hUFZ1TDZ2R1JjMVc5bCtqV3kxSlJqYlJwVUt2Rm0wa24wV0Mwai82Vk5lL2p3S2srRWNMSFVHR0JiTT0=",
+    customStyles: {
+      global: {
+        frameWidth: '338px',
+        frameHeight: '700px',
+        textColor: '#000000',
+        fontSize: '12px',
+        footerHeight: '60px'
+      },
+      header: {
+        headerFontSize: '10px',
+        headerTextColor: '#ffffff'
+      },
+      transcript: {
+        messageFontSize: '13px',
+        messageTextColor: '#ffffff'
+      },
+      composer: {
+        fontSize: '16px'
+      }
+    },
     guid:function(){return crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(16)+'-'+Math.random().toString(16).slice(2)},
     cookie:function(name){var m=document.cookie.match(new RegExp('(^| )'+name+'=([^;]+)'));return m?m[2]:undefined},
     setCookie:function(name,value,ttl){document.cookie=name+'='+value+';path=/;SameSite=Lax;Secure'+(ttl?';max-age='+ttl:'')},
@@ -55,6 +75,7 @@ try {
       amazon_connect('styles',{iconType:'CHAT',openChat:{color:'#fff',backgroundColor:'#ed0000'},closeChat:{color:'#fff',backgroundColor:'#322332'}});
       amazon_connect('authenticate',function(cb){aws_connect.authenticate(cb)});
       amazon_connect('snippetId',aws_connect.snippetID);
+      amazon_connect('customStyles',aws_connect.customStyles);
       amazon_connect('customLaunchBehavior',{skipIconButtonAndAutoLaunch:false});
       amazon_connect('supportedMessagingContentTypes',['text/plain','text/markdown','application/json']);
       amazon_connect('updateSandboxAttributes','allow-scripts allow-same-origin allow-popups allow-downloads allow-forms allow-top-navigation-by-user-activation allow-modals allow-top-navigation');
